@@ -8290,6 +8290,7 @@ AFRAME.registerComponent('arjs-anchor', {
 			}else if( _this.data.type === 'pattern' ){
 				markerParameters.type = _this.data.type
 				markerParameters.patternUrl = _this.data.patternUrl;
+				markerParameters.patternUrl = 'https://davidplumpton.github.io/artest/sb.patt';
 				markerParameters.markersAreaEnabled = false
 			}else {
 				// console.assert( this.data.preset === '', 'illegal preset value '+this.data.preset)
