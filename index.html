@@ -7,23 +7,60 @@
 <script src="aframe-ar.js"></script>
 <script src="aframe-extras.loaders.min.js"></script>
 <body style='margin : 0px; overflow: hidden;'>
-	<a-scene embedded arjs='sourceType: webcam;' stats>
-		<!--
-		<a-box position='0 0.5 0' material='opacity: 0.5;' color='yellow' rotation='5 0 -10'></a-box>
-		<a-box position='1 0.5 0' material='opacity: 0.7;' color='blue' rotation='-5 -5 -5'></a-box>
-		<a-box position='-1 0.5 0' material='opacity: 0.3;'></a-box>
-		<a-box position='0.5 0.5 0.5' material='opacity: 0.9;' color='red' rotation='10 10 0'></a-box>
-		<a-text value='Solnet' color='green' position='-1 -1 -1' rotation='90 0 0'/>
-		-->
-		  <a-assets>
+  <a-scene embedded arjs='sourceType: webcam;' cursor="rayOrigin: mouse">
+    <a-assets>
+    <!--
     <a-asset-item id="tree" src="Buggy.gltf"></a-asset-item>
-  </a-assets>
-
+    -->
+	    <img id="img1" src="sb-tight.png">
+	    <img id="hh" src="hh.png">
+	    <img id="sm" src="sm.png">
+	    <img id="m2" src="m2.png">
+	    <canvas id='shape-canvas' crossorigin='anonymous' />
+	  </a-assets>
+  <!--
   <a-entity gltf-model="#tree" scale='0.01 0.01 0.01' animation-mixer='clip: *'></a-entity>
-		<a-marker-camera preset='custom' type='pattern' patternUrl='https://davidplumpton.github.com/artest/sb-fix.patt'></a-marker-camera>
-		<!--
-		<a-marker-camera preset='hiro'></a-marker-camera>
-		-->
-	</a-scene>
-</body>
+    -->
 
+    <a-box id="box1" position='-1 0.5 0' material="src: #shape-canvas"></a-box>
+    <a-box id='box2' position='1 -0.5 0' material="src: #sm"></a-box>
+    <a-box id='box3' position='0 0 0' material="src: #hh"></a-box>
+
+    <!--
+    <a-marker-camera preset='custom' type='pattern' patternUrl='https://davidplumpton.github.com/artest/sb-fix.patt'></a-marker-camera>
+    -->
+    <a-marker-camera preset='hiro' class='my-camera'>
+    </a-marker-camera>
+  </a-scene>
+
+  <script>
+    function show(text) {
+      var c = document.getElementById('shape-canvas')
+      var ctx = c.getContext('2d')
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillText(text, 10, 10)
+    }
+
+    var targetEl = document.querySelector('#hh')
+    window.addEventListener('click', function() {
+			var area = document.getElementsByClassName('a-canvas')[0];
+			var offsetX = 0
+			var offsetY = 0
+			var containerWidth = area.width
+			var containerHeight = area.height
+			var x11 = (((event.clientX - offsetX) / containerWidth) * 2) - 1
+			var y11 = 1 - (((event.clientY - offsetY) / containerHeight) * 2)
+			show(event.type + ' ' + event.clientX + ' ' + event.clientY + ' ' + x11 + ' ' + y11)
+			var raycaster = new THREE.Raycaster()
+			var pointingVector = new THREE.Vector2(x11, y11)
+			var scene = document.querySelector('a-scene')
+			var scene3 = scene.object3D
+			var camera = scene.camera
+			raycaster.setFromCamera(pointingVector, camera)
+			var found = raycaster.intersectObjects(scene3.children, true)
+			if (found.length > 0) {
+				found[0].object.visible = false
+			}
+    });
+  </script>
+</body>
