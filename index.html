@@ -48,6 +48,7 @@
 			var offsetY = 0
 			var containerWidth = area.width
 			var containerHeight = area.height
+			alert(area + " " + containerWidth)
 			var x11 = (((event.clientX - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((event.clientY - offsetY) / containerHeight) * 2)
 			show(event.type + ' ' + event.clientX + ' ' + event.clientY + ' ' + x11 + ' ' + y11)
