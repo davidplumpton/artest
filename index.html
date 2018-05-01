@@ -49,7 +49,7 @@
 			var containerHeight = area.height
 			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
-			show('13 ' + event.type + ' ' + x + ' ' + y + ' ' + x11 + ' ' + y11)
+			show('14 ' + event.type + ' ' + x + ' ' + y + ' ' + x11 + ' ' + y11)
 			var raycaster = new THREE.Raycaster()
 			var pointingVector = new THREE.Vector2(x11, y11)
 			var scene = document.querySelector('a-scene')
@@ -65,7 +65,6 @@
 		area.addEventListener('touchstart', function(event) {
 			var x = event.touches[0].clientX || event.touches[0].pageX
 			var y = event.touches[0].clientY || event.touches[0].pageY
-			alert(event.touches.length + ' x ' + x)
 			handlePress(event, x, y)
 			event.preventDefault()
 		})
