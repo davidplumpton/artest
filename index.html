@@ -41,8 +41,9 @@
       ctx.fillText(text, 10, 10)
     }
 
-    window.addEventListener('click', function(event) {
-			var area = document.getElementsByClassName('a-canvas')[0];
+		var area = document.getElementsByClassName('a-canvas')[0];
+    area.addEventListener('click', function(event) {
+			//var area = document.getElementsByClassName('a-canvas')[0];
 			console.log('AREA ' + area)
 			var offsetX = 0
 			var offsetY = 0
