@@ -42,8 +42,10 @@
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
-    area.addEventListener('mousedown', function(event) {
-			console.log('AREA ' + area + ' ' + event.clientX + ' ' + area.width)
+    area.addEventListener('click', function(event) {
+			var s = 'AREA ' + area + ' ' + event.clientX + ' ' + area.width;
+			window.s = s;
+			console.log(s)
 			var offsetX = 0
 			var offsetY = 0
 			var containerWidth = area.width
