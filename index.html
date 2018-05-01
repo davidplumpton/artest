@@ -34,13 +34,14 @@
   </a-scene>
 
   <script>
-    function show(a, b) {
+    function show(a, b, c) {
       var c = document.getElementById('shape-canvas')
       var ctx = c.getContext('2d')
 			ctx.font = '20pt Arial'
       ctx.clearRect(0, 0, c.width, c.height);
       ctx.fillText(a, 10, 30)
       ctx.fillText(b, 10, 60)
+      ctx.fillText(c, 10, 90)
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
@@ -51,7 +52,7 @@
 			var containerHeight = area.height
 			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
-			show(x, x11)
+			show(x, x11, containerWidth)
 			var raycaster = new THREE.Raycaster()
 			var pointingVector = new THREE.Vector2(x11, y11)
 			var scene = document.querySelector('a-scene')
