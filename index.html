@@ -42,8 +42,8 @@
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
-    var handlePress = function(event) {
-			var s = 'AREA ' + area + ' ' + event.clientX + ' ' + area.width;
+    var handlePress = function(event, x, y) {
+			var s = 'AREA ' + area + ' ' + x + ' ' + area.width;
 			window.s = s;
 			alert(s);
 			console.log(s)
@@ -51,8 +51,6 @@
 			var offsetY = 0
 			var containerWidth = area.width
 			var containerHeight = area.height
-			var x = event.clientX || event.pageX
-			var y = event.clientY || event.pageY
 			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
 			show('13 ' + event.type + ' ' + x + ' ' + y + ' ' + x11 + ' ' + y11)
@@ -69,11 +67,15 @@
     }
 
 		area.addEventListener('touchstart', function(event) {
-			handlePress(event)
+			var x = event.touches[0].clientX
+			var y = event.touches[0].clientY
+			handlePress(event, x, y)
 			event.preventDefault()
 		})
 		area.addEventListener('mousedown', function(event) {
-			handlePress(event)
+			var x = event.clientX || event.pageX
+			var y = event.clientY || event.pageY
+			handlePress(event, x, y)
 		})
 
   </script>
