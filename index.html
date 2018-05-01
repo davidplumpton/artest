@@ -42,9 +42,10 @@
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
-    area.addEventListener('click', function(event) {
+    var handlePress = function(event) {
 			var s = 'AREA ' + area + ' ' + event.clientX + ' ' + area.width;
 			window.s = s;
+			alert(s);
 			console.log(s)
 			var offsetX = 0
 			var offsetY = 0
@@ -65,6 +66,15 @@
 			if (found.length > 0) {
 				found[0].object.visible = false
 			}
-    });
+    }
+
+		area.addEventListener('touchstart', function(event) {
+			handlePress(event)
+			event.preventDefault()
+		})
+		area.addEventListener('mousedown', function(event) {
+			handlePress(event)
+		})
+
   </script>
 </body>
