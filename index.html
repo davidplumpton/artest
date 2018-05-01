@@ -39,12 +39,12 @@
       var ctx = c.getContext('2d')
 			ctx.font = '20pt Arial'
       ctx.clearRect(0, 0, c.width, c.height);
-      ctx.fillText(a1, 10, 30)
-      ctx.fillText(a2, 10, 60)
-      ctx.fillText(a3, 10, 90)
-      ctx.fillText(a4, 10, 120)
-      ctx.fillText(a5, 10, 150)
-      ctx.fillText(a6, 10, 180)
+      ctx.fillText(a1, 10, 25)
+      ctx.fillText(a2, 10, 50)
+      ctx.fillText(a3, 10, 75)
+      ctx.fillText(a4, 10, 100)
+      ctx.fillText(a5, 10, 125)
+      ctx.fillText(a6, 10, 150)
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
@@ -52,11 +52,11 @@
       var area = document.getElementsByClassName('a-canvas')[0];
 			var offsetX = 0
 			var offsetY = 0
-			var containerWidth = area.width
-			var containerHeight = area.height
+			var containerWidth = window.innerWidth
+			var containerHeight = window.innerHeight
 			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
-			show(x, x11, containerWidth, area.width, window.innerWidth, 'ZZZ')
+			show(x, x11, y, y11, containerWidth, containerHeight)
 			var raycaster = new THREE.Raycaster()
 			var pointingVector = new THREE.Vector2(x11, y11)
 			var scene = document.querySelector('a-scene')
