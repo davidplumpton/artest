@@ -34,7 +34,7 @@
   </a-scene>
 
   <script>
-    function show(a, b, c) {
+    function show(a, b, c, d) {
       var c = document.getElementById('shape-canvas')
       var ctx = c.getContext('2d')
 			ctx.font = '20pt Arial'
@@ -42,17 +42,19 @@
       ctx.fillText(a, 10, 30)
       ctx.fillText(b, 10, 60)
       ctx.fillText(c, 10, 90)
+      ctx.fillText(d, 10, 120)
     }
 
 		var area = document.getElementsByClassName('a-canvas')[0];
     var handlePress = function(event, x, y) {
+      var area = document.getElementsByClassName('a-canvas')[0];
 			var offsetX = 0
 			var offsetY = 0
 			var containerWidth = area.width
 			var containerHeight = area.height
 			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
 			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
-			show(x, x11, containerWidth)
+			show(x, x11, containerWidth, area.width)
 			var raycaster = new THREE.Raycaster()
 			var pointingVector = new THREE.Vector2(x11, y11)
 			var scene = document.querySelector('a-scene')
