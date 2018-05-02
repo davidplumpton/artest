@@ -14,6 +14,7 @@
 <script src="aframe-extras.loaders.min.js"></script>
 
 <script>
+var SR2 = Math.sqrt(2);
 AFRAME.registerComponent('wall', {
   schema: {
     width: {type: 'number', default: 1},
@@ -45,7 +46,7 @@ AFRAME.registerComponent('wall', {
 
 var place = 'outside';
 var data = {
-  'outside': {place: 'outside', left: {text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.\nPress on the house\nto enter.'}, back: {image: '#hh', press: {move: 'entry'}}, right: {image: '#solnet'}, floor: {image: '#path'}},
+  'outside': {place: 'outside', left: {image: '#sky', text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.'}, back: {image: '#hh', press: {move: 'entry'}}, right: {image: '#night', text: 'Press on the\nhouse to start.'}, floor: {image: '#path'}},
   'entry': {place: 'entry', left: {image: '#to-stairs', text: 'Requirements\ngathering', press: {move: 'hall'}}, back: {image: '#to-hall', text: 'Quick P.O.C.'}, right: {image: '#to-living', text: 'Traditional\nWaterfall'}, floor: {image: '#floor', text: 'You are starting\nyour project.'}},
   'hall': {place: 'hall', left: {image: '#to-stairs'}, back: {image: '#to-stairs'}, right: {image: '#to-stairs'}, floor: {image: '#floor', text: 'You are suffering\nfrom Analysis\nParalysis'}}
 };
@@ -61,6 +62,8 @@ var data = {
       <img id="hh" src="images/hh512.png">
       <img id="sm" src="sm.png">
       <img id="m2" src="m2.png">
+      <img id="sky" src="images/sky512.png">
+      <img id="night" src="images/night512.png">
       <img id="path" src="images/path512.png">
       <img id="solnet" src="images/solnet.png">
       <img id="floor" src="images/floor512.png">
@@ -107,11 +110,13 @@ var data = {
     var setConfigurableAttributes = function(wall, wallData, name) {
       var wallSelector = '#' + name + '-canvas'
       var c = document.querySelector(wallSelector)
+      c.width = 300
+      c.height = 150
       var ctx = c.getContext('2d')
       ctx.clearRect(0, 0, c.width, c.height);
       var imgObj = document.querySelector(wallData.image)
       if (imgObj) {
-        ctx.drawImage(imgObj, 0, 0, 512, 512, 0, 0, 256, 128)
+        ctx.drawImage(imgObj, 0, 0, 512, 512, 0, 0, 300, 150)
       }
       if (wallData.text) {
         ctx.font = '20pt Spooky'
@@ -127,6 +132,10 @@ var data = {
       if (wallData.press) {
         wall.setAttribute('press', wallData.press.move)
       }
+      // ctx.beginPath()
+      // ctx.moveTo(0, 0)
+      // ctx.lineTo(300, 159)
+      // ctx.stroke()
     }
 
     var createLocation = function(frame, description) {
