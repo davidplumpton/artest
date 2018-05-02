@@ -78,9 +78,9 @@ var data = {
     </a-assets>
   <!--
   <a-entity gltf-model="#tree" scale='0.01 0.01 0.01' animation-mixer='clip: *'></a-entity>
+  <a-plane id="debug-info" position='0 5 -8' material="src: #debug-canvas" rotation='-60 0 0'></a-box>
+-->
 
-    <a-plane id="debug-info" position='0 0 -2' material="src: #debug-canvas" rotation='-60 0 0'></a-box>
-  -->
 
     <a-entity id='frame' rotation='-20 0 0' scale='2 2 2'>
     </a-entity>
@@ -166,7 +166,6 @@ var data = {
 
     var area = document.getElementsByClassName('a-canvas')[0];
     var handlePress = function(event, x, y) {
-      alert('press ' + x + ' ' + y)
       var area = document.getElementsByClassName('a-canvas')[0];
       var offsetX = 0
       var offsetY = 0
@@ -180,8 +179,10 @@ var data = {
       var scene = document.querySelector('a-scene')
       var scene3 = scene.object3D
       var camera = scene.camera
+      var frame3 = document.querySelector('#frame').object3D
       raycaster.setFromCamera(pointingVector, camera)
-      var found = raycaster.intersectObjects(scene3.children, true)
+      var found = raycaster.intersectObjects(frame3.children, true)
+      alert('found ' + found.length)
       if (found.length > 0) {
         var wall = found[0].object.el
         var press = wall.getAttribute('press')
