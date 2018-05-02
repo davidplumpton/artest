@@ -42,6 +42,13 @@ AFRAME.registerComponent('wall', {
     el.setObject3D('mesh', this.mesh);
   }
 });
+
+var place = 'outside';
+var data = {
+  'outside': {place: 'outside', left: {text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.\nPress on the house\nto enter.'}, back: {image: '#hh', press: {move: 'entry'}}, right: {image: '#solnet'}, floor: {image: '#path'}},
+  'entry': {place: 'entry', message: 'You have started\nyour project.', left: {image: '#to-stairs'}, back: {image: '#to-hall'}, right: {image: '#to-living'}, floor: {image: '#floor'}}
+};
+
 </script>
 <body style='margin : 0px; overflow: hidden;'>
   <a-scene embedded arjs='sourceType: webcam;'>
@@ -50,11 +57,15 @@ AFRAME.registerComponent('wall', {
     <a-asset-item id="tree" src="Buggy.gltf"></a-asset-item>
     -->
       <img id="img1" src="sb-tight.png">
-      <img id="hh" src="hh512.png">
+      <img id="hh" src="images/hh512.png">
       <img id="sm" src="sm.png">
       <img id="m2" src="m2.png">
       <img id="path" src="images/path512.png">
       <img id="solnet" src="images/solnet.png">
+      <img id="floor" src="images/floor512.png">
+      <img id="to-stairs" src="images/to-stairs512.png">
+      <img id="to-hall" src="images/to-hall512.png">
+      <img id="to-living" src="images/to-living512.png">
       <canvas id='debug-canvas' />
       <canvas id='message-canvas' />
       <canvas id='left-canvas' />
@@ -65,7 +76,8 @@ AFRAME.registerComponent('wall', {
     <a-plane id="debug-info" position='0 0 -2' material="src: #debug-canvas" rotation='-60 0 0'></a-box>
   -->
 
-    <a-entity id='frame' />
+    <a-entity id='frame' >
+    </a-entity>
 
     <!--
     <a-marker-camera preset='custom' type='pattern' patternUrl='https://davidplumpton.github.com/artest/sb-fix.patt'></a-marker-camera>
@@ -103,30 +115,38 @@ AFRAME.registerComponent('wall', {
       entity.setAttribute('material', {src: wallSelector})
     }
 
-    var createLocation = function(scene, description) {
-      var frame = document.querySelector('#frame')
+    var setConfigurableAttributes = function(wall, wallData, name) {
+      if (wallData.text) {
+        createTextWall(wall, name, wallData.text)
+      } else {
+        wall.setAttribute('material', {src: wallData.image})
+      }
+      if (wallData.press) {
+        wall.setAttribute('press', wallData.press.move)
+      }
+    }
+
+    var createLocation = function(frame, description) {
+      console.log('Creating location: ' + description.place)
       var left = document.createElement('a-image')
       left.setAttribute('position', {x: -1, y: 0, z: -0.25})
-      if (description.left.text) {
-        createTextWall(left, 'left', description.left.text)
-      } else {
-        left.setAttribute('material', {src: description.left.image})
-      }
       left.setAttribute('rotation', {x: 0, y: 45, z: 0})
+      setConfigurableAttributes(left, description.left, 'left')
       frame.appendChild(left);
       var back = document.createElement('a-image')
       back.setAttribute('position', {x: 0, y: 0, z: -0.5})
-      back.setAttribute('material', {src: description.back.image})
+      back.setAttribute('rotation', {x: 0, y: 0, z: 0})
+      setConfigurableAttributes(back, description.back, 'back')
       frame.appendChild(back);
       var right = document.createElement('a-image')
       right.setAttribute('position', {x: 1, y: 0, z: -0.25})
-      right.setAttribute('material', {src: description.right.image})
       right.setAttribute('rotation', {x: 0, y: -45, z: 0})
+      setConfigurableAttributes(right, description.right, 'right')
       frame.appendChild(right);
       var floor = document.createElement('a-image')
       floor.setAttribute('position', {x: 0, y: -0.5, z: 0})
-      floor.setAttribute('material', {src: description.floor.image})
       floor.setAttribute('rotation', {x: -90, y: 0, z: 0})
+      setConfigurableAttributes(floor, description.floor, 'floor')
 //      floor.setAttribute('wall', {})
       frame.appendChild(floor);
     }
@@ -149,10 +169,17 @@ AFRAME.registerComponent('wall', {
       raycaster.setFromCamera(pointingVector, camera)
       var found = raycaster.intersectObjects(scene3.children, true)
       if (found.length > 0) {
-        found[0].object.visible = false
-      } else {
-        // var d = {left: {image: '#hh'}, back: {image: '#hh'}, right: {image: '#hh'}, floor: {image: '#hh'}}
-        // createLocation(scene, d)
+        var wall = found[0].object.el
+        var press = wall.getAttribute('press')
+        if (press) {
+          var frame = document.getElementById('frame');
+          console.log('FRAME ' + frame)
+          while(frame.firstChild) {
+            console.log('remove')
+            frame.removeChild(frame.firstChild)
+          }
+          createLocation(frame, data[press])
+        }
       }
     }
 
@@ -170,9 +197,9 @@ AFRAME.registerComponent('wall', {
 
   </script>
   <script>
-    var d = {left: {text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.\nPress on the house\nto enter.'}, back: {image: '#hh'}, right: {image: '#solnet'}, floor: {image: '#path'}}
     var scene = document.querySelector('a-scene')
     var scene3 = scene.object3D
-    createLocation(scene, d)
+    var frame = document.querySelector('#frame');
+    createLocation(frame, data['outside'])
   </script>
 </body>
