@@ -14,7 +14,6 @@
 <script src="aframe-extras.loaders.min.js"></script>
 
 <script>
-var SR2 = Math.sqrt(2);
 AFRAME.registerComponent('wall', {
   schema: {
     width: {type: 'number', default: 1},
@@ -139,9 +138,11 @@ var data = {
     }
 
     var createLocation = function(frame, description) {
+      var offsetx = 0.85
+      var offsetz = 0.15
       console.log('Creating location: ' + description.place)
       var left = document.createElement('a-image')
-      left.setAttribute('position', {x: -1, y: 0, z: -0.25})
+      left.setAttribute('position', {x: -offsetx, y: 0, z: -offsetz})
       left.setAttribute('rotation', {x: 0, y: 45, z: 0})
       setConfigurableAttributes(left, description.left, 'left')
       frame.appendChild(left);
@@ -151,7 +152,7 @@ var data = {
       setConfigurableAttributes(back, description.back, 'back')
       frame.appendChild(back);
       var right = document.createElement('a-image')
-      right.setAttribute('position', {x: 1, y: 0, z: -0.25})
+      right.setAttribute('position', {x: offsetx, y: 0, z: -offsetz})
       right.setAttribute('rotation', {x: 0, y: -45, z: 0})
       setConfigurableAttributes(right, description.right, 'right')
       frame.appendChild(right);
