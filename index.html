@@ -3,28 +3,69 @@
 <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
 <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.5/aframe/build/aframe-ar.js"></script>
 -->
+<style>
+@font-face {
+  font-family: "Bacon";
+  src: url('/plasdrip.ttf');
+}
+</style>
 <script src="aframe.min.js"></script>
 <script src="aframe-ar.js"></script>
 <script src="aframe-extras.loaders.min.js"></script>
+
+<script>
+AFRAME.registerComponent('wall', {
+  schema: {
+    width: {type: 'number', default: 1},
+    height: {type: 'number', default: 1}
+  },
+
+  /**
+  * Initial creation and setting of the mesh.
+  */
+  init: function () {
+    var data = this.data;
+    var el = this.el;
+
+    // Create geometry.
+    var shape = new THREE.Shape();
+    shape.moveTo(-data.width/2, -data.height/2)
+    shape.lineTo(data.width/2, -data.height/2)
+    shape.lineTo(data.width/2, data.height/2)
+    shape.lineTo(-data.width/2, data.height/2)
+    this.geometry = new THREE.ShapeGeometry(shape)
+
+    // Create mesh.
+    this.mesh = new THREE.Mesh(this.geometry, null);
+
+    // Set mesh on entity.
+    el.setObject3D('mesh', this.mesh);
+  }
+});
+</script>
 <body style='margin : 0px; overflow: hidden;'>
-  <a-scene embedded arjs='sourceType: webcam;' cursor="rayOrigin: mouse">
+  <a-scene embedded arjs='sourceType: webcam;'>
     <a-assets>
     <!--
     <a-asset-item id="tree" src="Buggy.gltf"></a-asset-item>
     -->
-	    <img id="img1" src="sb-tight.png">
-	    <img id="hh" src="hh.png">
-	    <img id="sm" src="sm.png">
-	    <img id="m2" src="m2.png">
-	    <canvas id='shape-canvas' crossorigin='anonymous' />
-	  </a-assets>
+      <img id="img1" src="sb-tight.png">
+      <img id="hh" src="hh512.png">
+      <img id="sm" src="sm.png">
+      <img id="m2" src="m2.png">
+      <img id="path" src="images/path512.png">
+      <img id="solnet" src="images/solnet.png">
+      <canvas id='debug-canvas' />
+      <canvas id='message-canvas' />
+      <canvas id='left-canvas' />
+    </a-assets>
   <!--
   <a-entity gltf-model="#tree" scale='0.01 0.01 0.01' animation-mixer='clip: *'></a-entity>
-    -->
 
-    <a-box id="box1" position='-1 0.5 0' material="src: #shape-canvas"></a-box>
-    <a-box id='box2' position='1 -0.5 0' material="src: #sm"></a-box>
-    <a-box id='box3' position='0 0 0' material="src: #hh"></a-box>
+    <a-plane id="debug-info" position='0 0 -2' material="src: #debug-canvas" rotation='-60 0 0'></a-box>
+  -->
+
+    <a-entity id='frame' />
 
     <!--
     <a-marker-camera preset='custom' type='pattern' patternUrl='https://davidplumpton.github.com/artest/sb-fix.patt'></a-marker-camera>
@@ -35,9 +76,9 @@
 
   <script>
     function show(a1, a2, a3, a4, a5, a6) {
-      var c = document.getElementById('shape-canvas')
+      var c = document.getElementById('debug-canvas')
       var ctx = c.getContext('2d')
-			ctx.font = '20pt Arial'
+      ctx.font = '20pt Arial'
       ctx.clearRect(0, 0, c.width, c.height);
       ctx.fillText(a1, 10, 25)
       ctx.fillText(a2, 10, 50)
@@ -47,39 +88,91 @@
       ctx.fillText(a6, 10, 150)
     }
 
-		var area = document.getElementsByClassName('a-canvas')[0];
-    var handlePress = function(event, x, y) {
-      var area = document.getElementsByClassName('a-canvas')[0];
-			var offsetX = 0
-			var offsetY = 0
-			var containerWidth = window.innerWidth
-			var containerHeight = window.innerHeight
-			var x11 = (((x - offsetX) / containerWidth) * 2) - 1
-			var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
-			show(x, x11, y, y11, containerWidth, containerHeight)
-			var raycaster = new THREE.Raycaster()
-			var pointingVector = new THREE.Vector2(x11, y11)
-			var scene = document.querySelector('a-scene')
-			var scene3 = scene.object3D
-			var camera = scene.camera
-			raycaster.setFromCamera(pointingVector, camera)
-			var found = raycaster.intersectObjects(scene3.children, true)
-			if (found.length > 0) {
-				found[0].object.visible = false
-			}
+    var createTextWall = function(entity, wallName, text) {
+      var wallSelector = '#' + wallName + '-canvas'
+      var c = document.querySelector(wallSelector)
+      var ctx = c.getContext('2d')
+      ctx.font = '20pt Bacon'
+      ctx.clearRect(0, 0, c.width, c.height);
+      var lines = text.split('\n')
+      var y = 25;
+      for (var i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], 10, y)
+        y += 25
+      }
+      entity.setAttribute('material', {src: wallSelector})
     }
 
-		area.addEventListener('touchstart', function(event) {
-			var x = event.touches[0].clientX || event.touches[0].pageX
-			var y = event.touches[0].clientY || event.touches[0].pageY
-			handlePress(event, x, y)
-			event.preventDefault()
-		})
-		area.addEventListener('mousedown', function(event) {
-			var x = event.clientX || event.pageX
-			var y = event.clientY || event.pageY
-			handlePress(event, x, y)
-		})
+    var createLocation = function(scene, description) {
+      var frame = document.querySelector('#frame')
+      var left = document.createElement('a-image')
+      left.setAttribute('position', {x: -1, y: 0, z: -0.25})
+      if (description.left.text) {
+        createTextWall(left, 'left', description.left.text)
+      } else {
+        left.setAttribute('material', {src: description.left.image})
+      }
+      left.setAttribute('rotation', {x: 0, y: 45, z: 0})
+      frame.appendChild(left);
+      var back = document.createElement('a-image')
+      back.setAttribute('position', {x: 0, y: 0, z: -0.5})
+      back.setAttribute('material', {src: description.back.image})
+      frame.appendChild(back);
+      var right = document.createElement('a-image')
+      right.setAttribute('position', {x: 1, y: 0, z: -0.25})
+      right.setAttribute('material', {src: description.right.image})
+      right.setAttribute('rotation', {x: 0, y: -45, z: 0})
+      frame.appendChild(right);
+      var floor = document.createElement('a-image')
+      floor.setAttribute('position', {x: 0, y: -0.5, z: 0})
+      floor.setAttribute('material', {src: description.floor.image})
+      floor.setAttribute('rotation', {x: -90, y: 0, z: 0})
+//      floor.setAttribute('wall', {})
+      frame.appendChild(floor);
+    }
 
+    var area = document.getElementsByClassName('a-canvas')[0];
+    var handlePress = function(event, x, y) {
+      var area = document.getElementsByClassName('a-canvas')[0];
+      var offsetX = 0
+      var offsetY = 0
+      var containerWidth = window.innerWidth
+      var containerHeight = window.innerHeight
+      var x11 = (((x - offsetX) / containerWidth) * 2) - 1
+      var y11 = 1 - (((y - offsetY) / containerHeight) * 2)
+      show(x, x11, y, y11, containerWidth, containerHeight)
+      var raycaster = new THREE.Raycaster()
+      var pointingVector = new THREE.Vector2(x11, y11)
+      var scene = document.querySelector('a-scene')
+      var scene3 = scene.object3D
+      var camera = scene.camera
+      raycaster.setFromCamera(pointingVector, camera)
+      var found = raycaster.intersectObjects(scene3.children, true)
+      if (found.length > 0) {
+        found[0].object.visible = false
+      } else {
+        // var d = {left: {image: '#hh'}, back: {image: '#hh'}, right: {image: '#hh'}, floor: {image: '#hh'}}
+        // createLocation(scene, d)
+      }
+    }
+
+    area.addEventListener('touchstart', function(event) {
+      var x = event.touches[0].clientX || event.touches[0].pageX
+      var y = event.touches[0].clientY || event.touches[0].pageY
+      handlePress(event, x, y)
+      event.preventDefault()
+    })
+    area.addEventListener('mousedown', function(event) {
+      var x = event.clientX || event.pageX
+      var y = event.clientY || event.pageY
+      handlePress(event, x, y)
+    })
+
+  </script>
+  <script>
+    var d = {left: {text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.\nPress on the house\nto enter.'}, back: {image: '#hh'}, right: {image: '#solnet'}, floor: {image: '#path'}}
+    var scene = document.querySelector('a-scene')
+    var scene3 = scene.object3D
+    createLocation(scene, d)
   </script>
 </body>
