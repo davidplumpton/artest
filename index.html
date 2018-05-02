@@ -182,7 +182,7 @@ var data = {
       var frame3 = document.querySelector('#frame').object3D
       raycaster.setFromCamera(pointingVector, camera)
       var found = raycaster.intersectObjects(frame3.children, true)
-      alert('found ' + found.length)
+      alert('found ' + found.length + ' ' + frame3.children.length)
       if (found.length > 0) {
         var wall = found[0].object.el
         var press = wall.getAttribute('press')
