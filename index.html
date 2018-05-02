@@ -5,7 +5,7 @@
 -->
 <style>
 @font-face {
-  font-family: "Bacon";
+  font-family: "Spooky";
   src: url('/plasdrip.ttf');
 }
 </style>
@@ -46,7 +46,8 @@ AFRAME.registerComponent('wall', {
 var place = 'outside';
 var data = {
   'outside': {place: 'outside', left: {text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.\nPress on the house\nto enter.'}, back: {image: '#hh', press: {move: 'entry'}}, right: {image: '#solnet'}, floor: {image: '#path'}},
-  'entry': {place: 'entry', message: 'You have started\nyour project.', left: {image: '#to-stairs'}, back: {image: '#to-hall'}, right: {image: '#to-living'}, floor: {image: '#floor'}}
+  'entry': {place: 'entry', left: {image: '#to-stairs', text: 'Requirements\ngathering', press: {move: 'hall'}}, back: {image: '#to-hall', text: 'Quick P.O.C.'}, right: {image: '#to-living', text: 'Traditional\nWaterfall'}, floor: {image: '#floor', text: 'You are starting\nyour project.'}},
+  'hall': {place: 'hall', left: {image: '#to-stairs'}, back: {image: '#to-stairs'}, right: {image: '#to-stairs'}, floor: {image: '#floor', text: 'You are suffering\nfrom Analysis\nParalysis'}}
 };
 
 </script>
@@ -69,6 +70,9 @@ var data = {
       <canvas id='debug-canvas' />
       <canvas id='message-canvas' />
       <canvas id='left-canvas' />
+      <canvas id='back-canvas' />
+      <canvas id='right-canvas' />
+      <canvas id='floor-canvas' />
     </a-assets>
   <!--
   <a-entity gltf-model="#tree" scale='0.01 0.01 0.01' animation-mixer='clip: *'></a-entity>
@@ -76,7 +80,7 @@ var data = {
     <a-plane id="debug-info" position='0 0 -2' material="src: #debug-canvas" rotation='-60 0 0'></a-box>
   -->
 
-    <a-entity id='frame' >
+    <a-entity id='frame' rotation='-20 0 0' scale='2 2 2'>
     </a-entity>
 
     <!--
@@ -100,27 +104,26 @@ var data = {
       ctx.fillText(a6, 10, 150)
     }
 
-    var createTextWall = function(entity, wallName, text) {
-      var wallSelector = '#' + wallName + '-canvas'
+    var setConfigurableAttributes = function(wall, wallData, name) {
+      var wallSelector = '#' + name + '-canvas'
       var c = document.querySelector(wallSelector)
       var ctx = c.getContext('2d')
-      ctx.font = '20pt Bacon'
       ctx.clearRect(0, 0, c.width, c.height);
-      var lines = text.split('\n')
-      var y = 25;
-      for (var i = 0; i < lines.length; i++) {
-        ctx.fillText(lines[i], 10, y)
-        y += 25
+      var imgObj = document.querySelector(wallData.image)
+      if (imgObj) {
+        ctx.drawImage(imgObj, 0, 0, 512, 512, 0, 0, 256, 128)
       }
-      entity.setAttribute('material', {src: wallSelector})
-    }
-
-    var setConfigurableAttributes = function(wall, wallData, name) {
       if (wallData.text) {
-        createTextWall(wall, name, wallData.text)
-      } else {
-        wall.setAttribute('material', {src: wallData.image})
+        ctx.font = '20pt Spooky'
+        ctx.fillStyle = 'red'
+        var lines = wallData.text.split('\n')
+        var y = 25;
+        for (var i = 0; i < lines.length; i++) {
+          ctx.fillText(lines[i], 10, y)
+          y += 25
+        }
       }
+      wall.setAttribute('material', {src: wallSelector})
       if (wallData.press) {
         wall.setAttribute('press', wallData.press.move)
       }
@@ -173,9 +176,7 @@ var data = {
         var press = wall.getAttribute('press')
         if (press) {
           var frame = document.getElementById('frame');
-          console.log('FRAME ' + frame)
           while(frame.firstChild) {
-            console.log('remove')
             frame.removeChild(frame.firstChild)
           }
           createLocation(frame, data[press])
@@ -197,9 +198,11 @@ var data = {
 
   </script>
   <script>
+  var createFirstLocation = function() {
     var scene = document.querySelector('a-scene')
-    var scene3 = scene.object3D
-    var frame = document.querySelector('#frame');
+    var frame = document.querySelector('#frame')
     createLocation(frame, data['outside'])
+  }
+  createFirstLocation()
   </script>
 </body>
