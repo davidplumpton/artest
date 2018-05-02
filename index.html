@@ -107,6 +107,7 @@ var data = {
     }
 
     var setConfigurableAttributes = function(wall, wallData, name) {
+      wall.setAttribute('id', name)
       var wallSelector = '#' + name + '-canvas'
       var c = document.querySelector(wallSelector)
       c.width = 300
@@ -141,27 +142,38 @@ var data = {
       var offsetx = 0.85
       var offsetz = 0.15
       console.log('Creating location: ' + description.place)
-      var left = document.createElement('a-image')
+      var exists = document.getElementById('left')
+      var left, back, right, floor
+      if (exists) {
+        left = document.getElementById('left')
+        back = document.getElementById('back')
+        right = document.getElementById('right')
+        floor = document.getElementById('floor')
+      } else {
+        left = document.createElement('a-image')
+        back = document.createElement('a-image')
+        right = document.createElement('a-image')
+        floor = document.createElement('a-image')
+      }
       left.setAttribute('position', {x: -offsetx, y: 0, z: -offsetz})
       left.setAttribute('rotation', {x: 0, y: 45, z: 0})
       setConfigurableAttributes(left, description.left, 'left')
-      frame.appendChild(left);
-      var back = document.createElement('a-image')
       back.setAttribute('position', {x: 0, y: 0, z: -0.5})
       back.setAttribute('rotation', {x: 0, y: 0, z: 0})
       setConfigurableAttributes(back, description.back, 'back')
-      frame.appendChild(back);
-      var right = document.createElement('a-image')
       right.setAttribute('position', {x: offsetx, y: 0, z: -offsetz})
       right.setAttribute('rotation', {x: 0, y: -45, z: 0})
       setConfigurableAttributes(right, description.right, 'right')
-      frame.appendChild(right);
-      var floor = document.createElement('a-image')
       floor.setAttribute('position', {x: 0, y: -0.5, z: 0})
       floor.setAttribute('rotation', {x: -90, y: 0, z: 0})
       setConfigurableAttributes(floor, description.floor, 'floor')
+      if (!exists) {
+        frame.appendChild(left);
+        frame.appendChild(back);
+        frame.appendChild(right);
+        frame.appendChild(floor);
+      }
 //      floor.setAttribute('wall', {})
-      frame.appendChild(floor);
     }
 
     var area = document.getElementsByClassName('a-canvas')[0];
@@ -188,9 +200,6 @@ var data = {
         var press = wall.getAttribute('press')
         if (press) {
           var frame = document.getElementById('frame');
-          while(frame.firstChild) {
-            frame.removeChild(frame.firstChild)
-          }
           createLocation(frame, data[press])
         }
       }
