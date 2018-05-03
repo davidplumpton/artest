@@ -82,7 +82,7 @@ var data = {
 -->
 
 
-    <a-entity id='frame' rotation='0 0 0' scale='1 1 1'>
+    <a-entity id='frame' rotation='-20 0 0' scale='3 3 3'>
     </a-entity>
 
     <!--
@@ -131,6 +131,8 @@ var data = {
       wall.setAttribute('material', {src: wallSelector})
       if (wallData.press) {
         wall.setAttribute('press', wallData.press.move)
+      } else {
+        wall.setAttribute('press', null)
       }
       // ctx.beginPath()
       // ctx.moveTo(0, 0)
@@ -201,13 +203,10 @@ var data = {
       } else {
         // Raycaster issues on mobile, use a kluge based on screen thirds
         if (x11 < -0.333) {
-          alert('left')
           press = document.getElementById('left').getAttribute('press')
         } else if (x11 < 0.333) {
-          alert('back')
           press = document.getElementById('back').getAttribute('press')
         } else {
-          alert('right')
           press = document.getElementById('right').getAttribute('press')
         }
       }
