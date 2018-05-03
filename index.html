@@ -201,14 +201,16 @@ var data = {
       } else {
         // Raycaster issues on mobile, use a kluge based on screen thirds
         if (x11 < -0.333) {
+          alert('left')
           press = document.getElementById('left').getAttribute('press')
         } else if (x11 < 0.333) {
+          alert('back')
           press = document.getElementById('back').getAttribute('press')
         } else {
+          alert('right')
           press = document.getElementById('right').getAttribute('press')
         }
       }
-      alert(press)
       if (press) {
         var frame = document.getElementById('frame');
         createLocation(frame, data[press])
