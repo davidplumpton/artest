@@ -45,17 +45,18 @@ AFRAME.registerComponent('wall', {
 
 var place = 'outside';
 var data = {
-  'outside': {place: 'outside', left: {image: '#sky', text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.'}, back: {image: '#hh', press: {move: 'entry'}}, right: {image: '#night', text: 'Press on the\nhouse to start.'}, floor: {image: '#path', text: 'Press the floor\nto restart'}},
-  'entry': {place: 'entry', left: {image: '#to-stairs', text: 'A middlware\nproject', press: {move: 'hall'}}, back: {image: '#to-corridor', text: 'A webapp\nproject', press: {move: 'corridor'}}, right: {image: '#to-living', text: 'A mobile\nproject', press: {move: 'living'}}, floor: {image: '#floor', text: 'You are starting\nyour project.'}},
-  'hall': {place: 'hall', left: {image: '#to-bedroom', text: 'Quick P.O.C.', press: {move: 'bedroom'}}, back: {image: '#to-hallend', text: 'Agile method', press: {move: 'hallend'}}, right: {image: '#to-bed2', text: 'Classic\nWaterfall', press: {move: 'bed2'}}, floor: {image: '#floor', text: 'How will you\nrun your\nproject?'}},
-  'bedroom': {place: 'bedroom', left: {image: '#bedroom', text: ''}, back: {image: '#bedroom', text: ''}, right: {image: '#bedroom', text: ''}, floor: {image: '#floor', text: 'Your P.O.C.\nfails.\nFunding denied.'}, press: {move: 'outside'}},
-  'hallend': {place: 'hallend', left: {image: '#to-attic', text: '', press: {move: 'attic'}}, back: {image: '#to-stairs', text: ''}, right: {image: '#to-stairs', text: ''}, floor: {image: '#floor', text: 'You have no\nCustomer'}, press: {move: 'outside'}},
-  'bed2': {place: 'bed2', left: {image: '#bed2', text: ''}, back: {image: '#bed2', text: ''}, right: {image: '#bed2', text: ''}, floor: {image: '#floor', text: 'You suffer from\nAnalysis Paralysis.'}, press: {move: 'outside'}},
-  'corridor': {place: 'corridor', left: {image: '#to-basement', text: 'PHP', press: {move: 'basement'}}, back: {image: '#to-bathroom', text: 'React', press: {move: 'bathroom'}}, right: {image: '#to-dining', text: 'Java/JSP', press: {move: 'dining'}}, floor: {image: '#floor', text: 'What Web\ntechnology\ndo you choose?'}},
-  'basement': {place: 'basement', left: {image: '#basement', text: ''}, back: {image: '#basement', text: ''}, right: {image: '#basement', text: ''}, floor: {image: '#floor', text: 'You are constrained\nby legacy technology'}, press: {move: 'outside'}},
-  'bathroom': {place: 'bathroom', left: {image: '#bathroom', text: ''}, back: {image: '#bathroom', text: ''}, right: {image: '#bathroom', text: ''}, floor: {image: '#floor', text: 'You can\'t hire\nenough developers.'}, press: {move: 'outside'}},
-  'dining': {place: 'dining', left: {image: '#dining', text: ''}, back: {image: '#dining', text: ''}, right: {image: '#dining', text: ''}, floor: {image: '#floor', text: 'Your technical\ndebt rises too much.'}, press: {move: 'outside'}},
-  'living': {place: 'living', left: {image: '#living', text: ''}, back: {image: '#living', text: ''}, right: {image: '#living', text: ''}, floor: {image: '#floor', text: 'Your app violates\nthe terms of service'}, press: {move: 'outside'}}
+  'outside': {place: 'outside', left: {image: '#sky', text: 'Welcome to the\nChoose Your Own\nScary I.T. Adventure.'}, back: {image: '#hh', press: 'entry'}, right: {image: '#night', text: 'Press on the\nhouse to start.'}, floor: {image: '#path'}},
+  'entry': {place: 'entry', left: {image: '#to-stairs', text: 'A middlware\nproject', press: 'hall'}, back: {image: '#to-corridor', text: 'A webapp\nproject', press: 'corridor'}, right: {image: '#to-living', text: 'A mobile\nproject', press: 'living'}, floor: {image: '#floor', text: 'You are starting\nyour project.'}},
+  'hall': {place: 'hall', left: {image: '#to-bedroom', text: 'Quick P.O.C.', press: 'bedroom'}, back: {image: '#to-hallend', text: 'Agile method', press: 'hallend'}, right: {image: '#to-bed2', text: 'Classic\nWaterfall', press: 'bed2'}, floor: {image: '#floor', text: 'How will you\nrun your\nproject?'}},
+  'bedroom': {place: 'bedroom', left: {image: '#bedroom', text: ''}, back: {image: '#bedroom', text: ''}, right: {image: '#bedroom', text: ''}, floor: {image: '#floor', text: 'Your P.O.C.\nfails.\nFunding denied.', press: 'outside'}},
+  'hallend': {place: 'hallend', left: {image: '#to-attic', text: '', press: 'attic'}, back: {image: '#brick', text: ''}, right: {image: '#brick', text: ''}, floor: {image: '#floor', text: 'You have no\nCustomer', press: 'outside'}},
+  'bed2': {place: 'bed2', left: {image: '#bed2', text: ''}, back: {image: '#bed2', text: ''}, right: {image: '#bed2', text: ''}, floor: {image: '#floor', text: 'You suffer from\nAnalysis Paralysis.'}, press: 'outside'},
+  'corridor': {place: 'corridor', left: {image: '#to-basement', text: 'PHP', press: 'basement'}, back: {image: '#to-bathroom', text: 'React', press: 'bathroom'}, right: {image: '#to-dining', text: 'Java/JSP', press: 'dining'}, floor: {image: '#floor', text: 'What Web\ntechnology\ndo you choose?'}},
+  'basement': {place: 'basement', left: {image: '#basement', text: ''}, back: {image: '#basement', text: ''}, right: {image: '#basement', text: ''}, floor: {image: '#floor', text: 'You are constrained\nby legacy technology', press: 'outside'}},
+  'bathroom': {place: 'bathroom', left: {image: '#bathroom', text: ''}, back: {image: '#bathroom', text: ''}, right: {image: '#bathroom', text: ''}, floor: {image: '#floor', text: 'You can\'t hire\nenough developers.', press: 'outside'}},
+  'dining': {place: 'dining', left: {image: '#dining', text: ''}, back: {image: '#dining', text: ''}, right: {image: '#dining', text: ''}, floor: {image: '#floor', text: 'Your technical\ndebt rises too much.', press: 'outside'}},
+  'living': {place: 'living', left: {image: '#living', text: ''}, back: {image: '#living', text: ''}, right: {image: '#living', text: ''}, floor: {image: '#floor', text: 'Your app violates\nthe terms of service', press: 'outside'}},
+  'attic': {place: 'attic', left: {image: '#attic1', text: ''}, back: {image: '#attic2', text: ''}, right: {image: '#attic3', text: ''}, floor: {image: '#floor', text: 'You are strangled\nby scope creep', press: 'outside'}}
 };
 
 </script>
@@ -90,6 +91,10 @@ var data = {
       <img id='dining' src='images/dining512.jpg'>
       <img id='living' src='images/living512.jpg'>
       <img id='bed2' src='images/bed2-512.jpg'>
+      <img id='attic1' src='images/attic1-512.jpg'>
+      <img id='attic2' src='images/attic2-512.jpg'>
+      <img id='attic3' src='images/attic3-512.jpg'>
+      <img id='brick' src='images/brick-512.jpg'>
       <canvas id='debug-canvas' />
       <canvas id='message-canvas' />
       <canvas id='left-canvas' />
@@ -151,9 +156,9 @@ var data = {
       }
       wall.setAttribute('material', {src: wallSelector})
       if (wallData.press) {
-        wall.setAttribute('press', wallData.press.move)
+        wall.setAttribute('press', wallData.press)
       } else {
-        wall.setAttribute('press', null)
+        wall.setAttribute('press', 'nowhere')
       }
       // ctx.beginPath()
       // ctx.moveTo(0, 0)
@@ -231,7 +236,14 @@ var data = {
           press = document.getElementById('right').getAttribute('press')
         }
       }
-      if (press) {
+      // Detect dead end
+      if (document.getElementById('left').getAttribute('press') === 'nowhere' &&
+          document.getElementById('back').getAttribute('press') === 'nowhere' &&
+          document.getElementById('right').getAttribute('press') === 'nowhere') {
+            press = 'outside'
+      }
+
+      if (press !== 'nowhere') {
         var frame = document.getElementById('frame');
         createLocation(frame, data[press])
       }
