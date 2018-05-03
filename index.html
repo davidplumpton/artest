@@ -146,32 +146,32 @@ var data = {
       var left, back, right, floor
       if (exists) {
         left = document.getElementById('left')
-        // back = document.getElementById('back')
-        // right = document.getElementById('right')
-        // floor = document.getElementById('floor')
+        back = document.getElementById('back')
+        right = document.getElementById('right')
+        floor = document.getElementById('floor')
       } else {
         left = document.createElement('a-image')
-        // back = document.createElement('a-image')
-        // right = document.createElement('a-image')
-        // floor = document.createElement('a-image')
+        back = document.createElement('a-image')
+        right = document.createElement('a-image')
+        floor = document.createElement('a-image')
       }
       left.setAttribute('position', {x: -offsetx, y: 0, z: -offsetz})
       left.setAttribute('rotation', {x: 0, y: 45, z: 0})
       setConfigurableAttributes(left, description.left, 'left')
-      // back.setAttribute('position', {x: 0, y: 0, z: -0.5})
-      // back.setAttribute('rotation', {x: 0, y: 0, z: 0})
-      // setConfigurableAttributes(back, description.back, 'back')
-      // right.setAttribute('position', {x: offsetx, y: 0, z: -offsetz})
-      // right.setAttribute('rotation', {x: 0, y: -45, z: 0})
-      // setConfigurableAttributes(right, description.right, 'right')
-      // floor.setAttribute('position', {x: 0, y: -0.5, z: 0})
-      // floor.setAttribute('rotation', {x: -90, y: 0, z: 0})
-      // setConfigurableAttributes(floor, description.floor, 'floor')
+      back.setAttribute('position', {x: 0, y: 0, z: -0.5})
+      back.setAttribute('rotation', {x: 0, y: 0, z: 0})
+      setConfigurableAttributes(back, description.back, 'back')
+      right.setAttribute('position', {x: offsetx, y: 0, z: -offsetz})
+      right.setAttribute('rotation', {x: 0, y: -45, z: 0})
+      setConfigurableAttributes(right, description.right, 'right')
+      floor.setAttribute('position', {x: 0, y: -0.5, z: 0})
+      floor.setAttribute('rotation', {x: -90, y: 0, z: 0})
+      setConfigurableAttributes(floor, description.floor, 'floor')
       if (!exists) {
         frame.appendChild(left);
-        // frame.appendChild(back);
-        // frame.appendChild(right);
-        // frame.appendChild(floor);
+        frame.appendChild(back);
+        frame.appendChild(right);
+        frame.appendChild(floor);
       }
 //      floor.setAttribute('wall', {})
     }
@@ -194,14 +194,24 @@ var data = {
       var frame3 = document.querySelector('#frame').object3D
       raycaster.setFromCamera(pointingVector, camera)
       var found = raycaster.intersectObjects(frame3.children, true)
-      alert('found ' + found.length + ' ' + frame3.children.length)
+      var press
       if (found.length > 0) {
         var wall = found[0].object.el
-        var press = wall.getAttribute('press')
-        if (press) {
-          var frame = document.getElementById('frame');
-          createLocation(frame, data[press])
+        press = wall.getAttribute('press')
+      } else {
+        // Raycaster issues on mobile, use a kluge based on screen thirds
+        if (x11 < -0.333) {
+          press = document.getElementById('left').getAttribute('press')
+        } else if (x11 < 0.333) {
+          press = document.getElementById('back').getAttribute('press')
+        } else {
+          press = document.getElementById('right').getAttribute('press')
         }
+      }
+      alert(press)
+      if (press) {
+        var frame = document.getElementById('frame');
+        createLocation(frame, data[press])
       }
     }
 
